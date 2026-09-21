@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>AI-автоматизация для бизнеса — боты, сайты, интеграции</title>
+<meta name="description" content="Автоматизирую рутину малого и среднего бизнеса с помощью AI: чат-боты, сайты с приёмом заявок, интеграции с CRM, маркетплейсы, аналитика. Первая консультация бесплатно.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@500;600;700;800;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#ffffff;
+    --bg-alt:#f3f5f8;
+    --bg-ink:#161a22;
+    --ink:#181c24;
+    --ink-soft:#575f6d;
+    --line:#e4e8ee;
+    --accent:#ff6a2b;
+    --accent-soft:#fff1ea;
+    --accent-deep:#e2521a;
+    --good:#0f9d76;
+    --radius:14px;
+    --maxw:1120px;
+    --pad:24px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;}
+  body{
+    margin:0;background:var(--bg);color:var(--ink);
+    font-family:'Inter',system-ui,sans-serif;
+    font-size:17px;line-height:1.6;-webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,.display{font-family:'Golos Text','Inter',sans-serif;letter-spacing:-.02em;line-height:1.08;}
+  p{margin:0 0 1em;}
+  a{color:inherit;}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 var(--pad);}
+  .accent{color:var(--accent);}
+
+  /* buttons */
+  .btn{
+    display:inline-flex;align-items:center;gap:9px;
+    font-family:'Golos Text',sans-serif;font-weight:700;font-size:16px;
+    padding:14px 24px;border-radius:11px;border:1.5px solid transparent;
+    text-decoration:none;cursor:pointer;transition:transform .12s ease,background .15s ease,box-shadow .15s ease;
+  }
+  .btn-primary{background:var(--accent);color:#fff;box-shadow:0 6px 18px rgba(255,106,43,.28);}
+  .btn-primary:hover{background:var(--accent-deep);transform:translateY(-1px);}
+  .btn-ghost{background:transparent;color:var(--ink);border-color:var(--line);}
+  .btn-ghost:hover{border-color:var(--ink);}
+  .btn-lg{padding:17px 30px;font-size:17px;}
+
+  /* header */
+  header.site{
+    position:sticky;top:0;z-index:50;background:rgba(255,255,255,.86);
+    backdrop-filter:saturate(1.4) blur(10px);border-bottom:1px solid var(--line);
+    padding-top:env(safe-area-inset-top,0);
+  }
+  .nav{display:flex;align-items:center;justify-content:space-between;height:66px;}
+  .logo{display:flex;align-items:center;gap:11px;font-family:'Golos Text';font-weight:800;font-size:19px;letter-spacing:-.02em;text-decoration:none;color:var(--ink);}
+  .logo .mark{
+    width:34px;height:34px;border-radius:9px;background:var(--bg-ink);color:#fff;
+    display:grid;place-items:center;font-size:17px;font-weight:900;flex-shrink:0;
+  }
+  .logo .mark b{color:var(--accent);}
+  .nav-links{display:flex;gap:28px;align-items:center;}
+  .nav-links a{text-decoration:none;color:var(--ink-soft);font-weight:500;font-size:15.5px;transition:color .15s;}
+  .nav-links a:hover{color:var(--ink);}
+  .nav .btn{padding:10px 18px;font-size:15px;}
+  .burger{display:none;background:none;border:none;font-size:26px;cursor:pointer;color:var(--ink);}
+  @media(max-width:860px){
+    .nav-links{display:none;}
+    .nav .nav-cta{display:none;}
+    .burger{display:block;}
+  }
+
+  /* hero */
+  .hero{padding:66px 0 56px;overflow:hidden;}
+  .hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:56px;align-items:center;}
+  .eyebrow{display:inline-flex;align-items:center;gap:8px;background:var(--accent-soft);color:var(--accent-deep);
+    font-family:'Golos Text';font-weight:700;font-size:14px;padding:7px 14px;border-radius:100px;margin-bottom:22px;}
+  .eyebrow .dot{width:7px;height:7px;border-radius:50%;background:var(--accent);}
+  .hero h1{font-size:52px;font-weight:800;margin:0 0 20px;}
+  .hero .lead{font-size:20px;color:var(--ink-soft);margin-bottom:30px;max-width:33ch;}
+  .hero-cta{display:flex;gap:14px;flex-wrap:wrap;}
+  .hero-trust{margin-top:26px;font-size:15px;color:var(--ink-soft);display:flex;align-items:center;gap:10px;}
+  .hero-trust b{color:var(--ink);font-family:'Golos Text';}
+
+  /* hero demo card */
+  .demo{
+    background:var(--bg-ink);border-radius:20px;padding:22px;color:#e9edf3;
+    box-shadow:0 24px 60px -20px rgba(22,26,34,.5);position:relative;
+  }
+  .demo-top{display:flex;align-items:center;gap:9px;padding-bottom:16px;border-bottom:1px solid rgba(255,255,255,.09);margin-bottom:16px;}
+  .demo-top .d{width:11px;height:11px;border-radius:50%;background:#3a4150;}
+  .demo-top .d:nth-child(1){background:var(--accent);}
+  .demo-top span{margin-left:auto;font-size:12.5px;color:#8b93a3;font-weight:500;}
+  .msg{max-width:82%;padding:11px 15px;border-radius:14px;margin-bottom:11px;font-size:14.5px;line-height:1.45;animation:pop .5s both;}
+  .msg.in{background:#242b38;border-bottom-left-radius:5px;}
+  .msg.out{background:var(--accent);color:#fff;margin-left:auto;border-bottom-right-radius:5px;}
+  .msg.sys{background:transparent;border:1px dashed rgba(255,255,255,.18);color:#aeb6c4;max-width:100%;text-align:center;font-size:13px;}
+  .msg:nth-child(2){animation-delay:.15s;}
+  .msg:nth-child(3){animation-delay:.5s;}
+  .msg:nth-child(4){animation-delay:.9s;}
+  .msg:nth-child(5){animation-delay:1.3s;}
+  @keyframes pop{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+  @media(prefers-reduced-motion:reduce){.msg{animation:none;}}
+
+  /* generic section */
+  section{padding:70px 0;}
+  .sec-head{max-width:640px;margin-bottom:44px;}
+  .sec-head.center{margin-left:auto;margin-right:auto;text-align:center;}
+  .sec-head h2{font-size:38px;font-weight:800;margin:0 0 14px;}
+  .sec-head p{font-size:18px;color:var(--ink-soft);margin:0;}
+  .kicker{font-family:'Golos Text';font-weight:700;color:var(--accent);font-size:15px;margin-bottom:12px;}
+
+  /* pains */
+  .pains{background:var(--bg-alt);}
+  .pain-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;}
+  .pain{background:var(--bg);border:1px solid var(--line);border-radius:var(--radius);padding:24px;}
+  .pain .ic{font-size:26px;margin-bottom:14px;}
+  .pain h3{font-size:18px;font-weight:700;margin:0 0 8px;}
+  .pain p{font-size:15px;color:var(--ink-soft);margin:0;line-height:1.5;}
+
+  /* services */
+  .svc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;}
+  .svc{
+    border:1px solid var(--line);border-radius:var(--radius);padding:26px;background:var(--bg);
+    transition:border-color .16s ease,transform .16s ease;display:flex;flex-direction:column;
+  }
+  .svc:hover{border-color:var(--accent);transform:translateY(-3px);}
+  .svc .ic{width:46px;height:46px;border-radius:11px;background:var(--accent-soft);display:grid;place-items:center;font-size:23px;margin-bottom:18px;}
+  .svc h3{font-size:20px;font-weight:700;margin:0 0 12px;}
+  .svc .pain-line{font-size:14.5px;color:var(--ink-soft);margin:0 0 12px;padding-left:15px;border-left:2px solid var(--line);}
+  .svc .sol{font-size:15.5px;margin:0 0 14px;color:var(--ink);}
+  .svc .res{margin-top:auto;font-family:'Golos Text';font-weight:600;font-size:14.5px;color:var(--good);display:flex;gap:8px;align-items:flex-start;}
+  .svc .res .chk{flex-shrink:0;}
+
+  /* cases */
+  .cases{background:var(--bg-ink);color:#e9edf3;}
+  .cases .sec-head h2{color:#fff;}
+  .cases .sec-head p{color:#9aa3b2;}
+  .cases .kicker{color:var(--accent);}
+  .case{
+    display:grid;grid-template-columns:200px 1fr;gap:34px;padding:34px 0;border-top:1px solid rgba(255,255,255,.1);align-items:start;
+  }
+  .case:first-of-type{border-top:none;}
+  .case-tag{font-family:'Golos Text';}
+  .case-tag .niche{font-size:13px;color:var(--accent);font-weight:700;text-transform:uppercase;letter-spacing:.04em;margin-bottom:6px;}
+  .case-tag .who{font-size:20px;font-weight:700;color:#fff;line-height:1.2;}
+  .case-body .row{margin-bottom:16px;}
+  .case-body .row:last-child{margin-bottom:0;}
+  .case-body .lab{font-family:'Golos Text';font-weight:700;font-size:13.5px;margin-bottom:5px;display:inline-block;padding:3px 10px;border-radius:6px;}
+  .lab.pain{background:rgba(255,106,43,.16);color:#ffb492;}
+  .lab.did{background:rgba(255,255,255,.1);color:#c8cfdb;}
+  .lab.res{background:rgba(15,157,118,.18);color:#5fd8b3;}
+  .case-body p{margin:0;color:#c3cad6;font-size:15.5px;line-height:1.6;}
+  .case-body .res-text{color:#eef7f3;font-weight:500;}
+
+  /* process */
+  .steps{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;counter-reset:step;}
+  .step{position:relative;padding-top:16px;}
+  .step .n{font-family:'Golos Text';font-weight:900;font-size:15px;color:#fff;background:var(--accent);
+    width:32px;height:32px;border-radius:9px;display:grid;place-items:center;margin-bottom:16px;}
+  .step h3{font-size:18px;font-weight:700;margin:0 0 8px;}
+  .step p{font-size:15px;color:var(--ink-soft);margin:0;line-height:1.5;}
+
+  /* CTA / form */
+  .cta{background:var(--bg-alt);}
+  .cta-card{
+    background:var(--bg);border:1px solid var(--line);border-radius:24px;
+    display:grid;grid-template-columns:1fr 1fr;gap:0;overflow:hidden;
+  }
+  .cta-left{padding:48px;}
+  .cta-left h2{font-size:34px;font-weight:800;margin:0 0 16px;}
+  .cta-left p{color:var(--ink-soft);font-size:17px;margin-bottom:26px;}
+  .cta-left .free{display:inline-flex;align-items:center;gap:10px;background:var(--accent-soft);color:var(--accent-deep);
+    font-family:'Golos Text';font-weight:700;font-size:15px;padding:9px 16px;border-radius:10px;margin-bottom:24px;}
+  .cta-tg{margin-top:8px;font-size:15px;color:var(--ink-soft);}
+  .cta-tg a{color:var(--accent-deep);font-weight:600;text-decoration:none;}
+  .cta-right{padding:48px;background:var(--bg-alt);border-left:1px solid var(--line);}
+  .field{margin-bottom:16px;}
+  .field label{display:block;font-family:'Golos Text';font-weight:600;font-size:14px;margin-bottom:6px;}
+  .field input,.field textarea,.field select{
+    width:100%;padding:13px 15px;border:1.5px solid var(--line);border-radius:10px;
+    font-family:inherit;font-size:15.5px;background:var(--bg);color:var(--ink);transition:border-color .15s;
+  }
+  .field input:focus,.field textarea:focus,.field select:focus{outline:none;border-color:var(--accent);}
+  .field textarea{resize:vertical;min-height:84px;}
+  .form-note{font-size:13px;color:var(--ink-soft);margin-top:4px;}
+  .form-ok{display:none;padding:16px;background:rgba(15,157,118,.1);border:1px solid rgba(15,157,118,.35);
+    border-radius:10px;color:#0b7d5e;font-weight:500;font-size:15px;}
+
+  /* footer */
+  footer.site{background:var(--bg-ink);color:#9aa3b2;padding:48px 0 40px;padding-bottom:calc(40px + env(safe-area-inset-bottom,0));}
+  .foot{display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;align-items:center;}
+  .foot .logo{color:#fff;}
+  .foot a{color:#c3cad6;text-decoration:none;}
+  .foot a:hover{color:#fff;}
+  .foot-links{display:flex;gap:24px;flex-wrap:wrap;}
+  .foot-copy{width:100%;border-top:1px solid rgba(255,255,255,.1);margin-top:26px;padding-top:22px;font-size:13.5px;color:#6b7382;}
+
+  /* outcomes */
+  .out-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;}
+  .out{border:1.5px solid var(--line);border-radius:var(--radius);padding:26px;background:var(--bg);transition:border-color .16s;}
+  .out:hover{border-color:var(--accent);}
+  .out .ar{font-family:'Golos Text';font-weight:900;font-size:26px;line-height:1;margin-bottom:14px;}
+  .out.down .ar{color:var(--accent-deep);}
+  .out.up .ar{color:var(--good);}
+  .out h3{font-size:18px;font-weight:700;margin:0 0 8px;}
+  .out p{font-size:14.5px;color:var(--ink-soft);margin:0;line-height:1.5;}
+
+  /* savings */
+  .savings{background:var(--bg-alt);}
+  .save-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+  .save-card{border-radius:18px;padding:34px;border:1.5px solid var(--line);background:var(--bg);}
+  .save-card.newc{border-color:var(--accent);background:var(--accent-soft);}
+  .save-card .cap{font-family:'Golos Text';font-weight:700;font-size:14px;letter-spacing:.03em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:18px;}
+  .save-card.newc .cap{color:var(--accent-deep);}
+  .save-row{display:flex;justify-content:space-between;gap:14px;padding:12px 0;border-bottom:1px solid var(--line);font-size:15.5px;}
+  .save-row:last-of-type{border-bottom:none;}
+  .save-row .sum{font-family:'Golos Text';font-weight:600;white-space:nowrap;color:var(--ink);}
+  .save-total{display:flex;justify-content:space-between;gap:14px;margin-top:16px;padding-top:16px;border-top:2px solid var(--ink);font-family:'Golos Text';font-weight:800;font-size:18px;}
+  .save-total .big{color:var(--ink);}
+  .save-card.newc .save-total{border-top-color:var(--accent);}
+  .save-card.newc .save-total .big{color:var(--accent-deep);}
+  .save-card.newc .save-line{font-size:15.5px;color:var(--ink);padding:12px 0;border-bottom:1px solid rgba(255,106,43,.2);display:flex;gap:10px;}
+  .save-card.newc .save-line:last-of-type{border-bottom:none;}
+  .save-card.newc .save-line b{font-family:'Golos Text';}
+  .save-foot{margin-top:26px;display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+  .save-foot .fitem{background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:20px;}
+  .save-foot .fitem .big{font-family:'Golos Text';font-weight:800;font-size:19px;margin-bottom:6px;display:flex;align-items:center;gap:9px;}
+  .save-foot .fitem.up .big{color:var(--good);}
+  .save-foot .fitem.down .big{color:var(--accent-deep);}
+  .save-foot .fitem p{margin:0;font-size:15px;color:var(--ink-soft);}
+  .save-disc{margin-top:20px;font-size:13.5px;color:var(--ink-soft);}
+
+  /* responsive */
+  @media(max-width:960px){
+    .save-grid{grid-template-columns:1fr;}
+    .hero-grid{grid-template-columns:1fr;gap:40px;}
+    .hero h1{font-size:42px;}
+    .pain-grid{grid-template-columns:repeat(2,1fr);}
+    .out-grid{grid-template-columns:repeat(2,1fr);}
+    .svc-grid{grid-template-columns:repeat(2,1fr);}
+    .steps{grid-template-columns:repeat(2,1fr);}
+    .cta-card{grid-template-columns:1fr;}
+    .cta-right{border-left:none;border-top:1px solid var(--line);}
+  }
+  @media(max-width:600px){
+    :root{--pad:18px;}
+    .hero h1{font-size:34px;}
+    .hero .lead{font-size:18px;}
+    .sec-head h2{font-size:29px;}
+    .svc-grid{grid-template-columns:1fr;}
+    .out-grid{grid-template-columns:1fr;}
+    .pain-grid{grid-template-columns:1fr;}
+    .steps{grid-template-columns:1fr;}
+    .case{grid-template-columns:1fr;gap:18px;}
+    .save-foot{grid-template-columns:1fr;}
+    .cta-left,.cta-right{padding:30px;}
+    section{padding:52px 0;}
+  }
+</style>
+</head>
+<body>
+
+<header class="site">
+  <div class="wrap nav">
+    <a href="#top" class="logo"><span class="mark">A<b>·</b></span> AI Автоматизация</a>
+    <nav class="nav-links">
+      <a href="#services">Услуги</a>
+      <a href="#savings">Экономия</a>
+      <a href="#cases">Кейсы</a>
+      <a href="#process">Как работаю</a>
+      <a href="#contact">Контакты</a>
+    </nav>
+    <a href="#contact" class="btn btn-primary nav-cta">Бесплатный разбор</a>
+    <button class="burger" id="burgerBtn" aria-label="Меню">☰</button>
+  </div>
+</header>
+
+<main id="top">
+
+<!-- HERO -->
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <span class="eyebrow"><span class="dot"></span> AI-решения для малого и среднего бизнеса</span>
+      <h1>Ваш бизнес теряет время и клиентов на рутине. Я это автоматизирую.</h1>
+      <p class="lead">Боты, сайты и интеграции, которые отвечают клиентам, принимают заявки и ведут учёт — пока вы занимаетесь делом.</p>
+      <div class="hero-cta">
+        <a href="#contact" class="btn btn-primary btn-lg">Получить бесплатный разбор</a>
+        <a href="#cases" class="btn btn-ghost btn-lg">Смотреть кейсы</a>
+      </div>
+      <div class="hero-trust">✓ <b>13+ проектов</b> · боты, сайты, автоматизация, маркетплейсы</div>
+    </div>
+    <div class="demo" aria-hidden="true">
+      <div class="demo-top"><span class="d"></span><span class="d"></span><span class="d"></span><span>бот принимает заявку · 02:14</span></div>
+      <div class="msg in">Здравствуйте! Хочу записаться на стрижку в субботу 👋</div>
+      <div class="msg out">Привет! Свободно в 12:00, 14:30 и 17:00. Какое удобнее?</div>
+      <div class="msg in">В 14:30</div>
+      <div class="msg out">Записал ✅ Суббота, 14:30, мастер Игорь. Напомню за 2 часа до визита.</div>
+      <div class="msg sys">Заявка ушла владельцу в Telegram и в CRM — ни одна не потеряна</div>
+    </div>
+  </div>
+</section>
+
+<!-- OUTCOMES -->
+<section id="outcomes">
+  <div class="wrap">
+    <div class="sec-head center">
+      <div class="kicker">Зачем это вашему бизнесу</div>
+      <h2>Автоматизация работает на ваши деньги</h2>
+    </div>
+    <div class="out-grid">
+      <div class="out down">
+        <div class="ar">↓</div>
+        <h3>Оптимизирую расходы</h3>
+        <p>Рутина, за которую вы платите зарплату, уходит на автоматику. Меньше ручного труда — меньше затрат.</p>
+      </div>
+      <div class="out up">
+        <div class="ar">↑</div>
+        <h3>Увеличиваю выручку</h3>
+        <p>Заявки принимаются круглосуточно и не теряются. Больше обращений доходит до сделки.</p>
+      </div>
+      <div class="out down">
+        <div class="ar">↓</div>
+        <h3>Сокращаю штат на рутине</h3>
+        <p>Работу, ради которой держат отдельных людей, берёт на себя система — без выходных и ошибок.</p>
+      </div>
+      <div class="out up">
+        <div class="ar">↑</div>
+        <h3>Освобождаю время</h3>
+        <p>Вы и команда перестаёте тонуть в однотипных задачах и занимаетесь тем, что приносит деньги.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PAINS -->
+<section class="pains">
+  <div class="wrap">
+    <div class="sec-head center">
+      <div class="kicker">Знакомо?</div>
+      <h2>На что уходит время и деньги вашего бизнеса</h2>
+    </div>
+    <div class="pain-grid">
+      <div class="pain">
+        <div class="ic">🌙</div>
+        <h3>Заявки теряются ночью</h3>
+        <p>Клиент написал в нерабочее время, никто не ответил — и он ушёл к конкуренту.</p>
+      </div>
+      <div class="pain">
+        <div class="ic">🔁</div>
+        <h3>Одно и то же вручную</h3>
+        <p>Сотрудники отвечают на одинаковые вопросы и разносят данные по таблицам целыми днями.</p>
+      </div>
+      <div class="pain">
+        <div class="ic">📉</div>
+        <h3>Решения вслепую</h3>
+        <p>Данные о продажах разбросаны, отчёты собираются руками, картины по бизнесу нет.</p>
+      </div>
+      <div class="pain">
+        <div class="ic">💸</div>
+        <h3>Лишние расходы на рутину</h3>
+        <p>Держите людей на работе, которую давно могла бы делать программа за копейки.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section id="services">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="kicker">Что я делаю</div>
+      <h2>Услуги</h2>
+      <p>Каждое решение закрывает конкретную боль и окупается экономией времени или ростом заявок.</p>
+    </div>
+    <div class="svc-grid">
+
+      <div class="svc">
+        <div class="ic">🤖</div>
+        <h3>Чат-боты и AI-ассистенты</h3>
+        <p class="pain-line">Менеджер не успевает отвечать, часть обращений теряется, ночью не отвечает никто.</p>
+        <p class="sol">Бот консультирует клиентов, отвечает на вопросы и принимает заявки или запись круглосуточно.</p>
+        <div class="res"><span class="chk">✓</span> Ни одна заявка не теряется, менеджер разгружен</div>
+      </div>
+
+      <div class="svc">
+        <div class="ic">🌐</div>
+        <h3>Сайты с приёмом заявок</h3>
+        <p class="pain-line">Заявки с сайта приходят на почту, их проглядывают и вручную переносят в таблицу.</p>
+        <p class="sol">Сайт или лендинг с формой, которая сразу отправляет заявку в Telegram и CRM, а клиенту — подтверждение.</p>
+        <div class="res"><span class="chk">✓</span> Обращение доходит за секунды, ничего не теряется</div>
+      </div>
+
+      <div class="svc">
+        <div class="ic">⚙️</div>
+        <h3>Автоматизация рутины</h3>
+        <p class="pain-line">Часы уходят на ручной разнос заявок, заполнение таблиц, пересылку данных между сервисами.</p>
+        <p class="sol">Настраиваю процессы, которые сами обрабатывают заявки, документы и данные без участия человека.</p>
+        <div class="res"><span class="chk">✓</span> Часы ручной работы превращаются в секунды</div>
+      </div>
+
+      <div class="svc">
+        <div class="ic">🧾</div>
+        <h3>Обработка документов и чеков</h3>
+        <p class="pain-line">Сотрудник вручную вбивает данные из чеков, счетов и накладных — долго и с ошибками.</p>
+        <p class="sol">Фото или файл документа распознаётся, нужные данные извлекаются и попадают в таблицу автоматически.</p>
+        <div class="res"><span class="chk">✓</span> Учёт без ручного ввода и опечаток</div>
+      </div>
+
+      <div class="svc">
+        <div class="ic">🎯</div>
+        <h3>Квалификация лидов</h3>
+        <p class="pain-line">Менеджер тратит время на холодные заявки, а горячие теряются в общем потоке.</p>
+        <p class="sol">AI оценивает каждую заявку — горячая, тёплая или холодная — и присылает менеджеру краткую сводку.</p>
+        <div class="res"><span class="chk">✓</span> Менеджер бьёт по приоритетам, а не распыляется</div>
+      </div>
+
+      <div class="svc">
+        <div class="ic">🔗</div>
+        <h3>Интеграция с CRM</h3>
+        <p class="pain-line">Заявки из разных каналов не попадают в CRM сами, историю ведут вручную и теряют.</p>
+        <p class="sol">Связываю каналы с amoCRM или Bitrix: сделки создаются автоматически, менеджер получает уведомления.</p>
+        <div class="res"><span class="chk">✓</span> Все обращения в CRM без ручного заноса</div>
+      </div>
+
+      <div class="svc">
+        <div class="ic">🛒</div>
+        <h3>Маркетплейсы</h3>
+        <p class="pain-line">Селлер вручную следит за ценами конкурентов, остатками и отзывами — и не успевает реагировать.</p>
+        <p class="sol">Мониторинг цен, остатков FBO/FBS и отзывов на Ozon, WB и Яндекс Маркете, аналитика продаж по SKU.</p>
+        <div class="res"><span class="chk">✓</span> Видите рынок в реальном времени и реагируете вовремя</div>
+      </div>
+
+      <div class="svc">
+        <div class="ic">📊</div>
+        <h3>Дашборды и аналитика</h3>
+        <p class="pain-line">Отчёты собираются руками в Excel, единой картины по бизнесу нет.</p>
+        <p class="sol">Собираю дашборд с ключевыми метриками, графиками и фильтрами — живая ссылка, обновляется сама.</p>
+        <div class="res"><span class="chk">✓</span> Вся аналитика в одном окне</div>
+      </div>
+
+      <div class="svc">
+        <div class="ic">🔎</div>
+        <h3>Парсинг и сбор данных</h3>
+        <p class="pain-line">Сбор данных о конкурентах, рынке или вакансиях вручную — долго и неполно.</p>
+        <p class="sol">Пишу парсеры под Avito, HH, Яндекс.Карты и другие площадки, с анализом тональности отзывов.</p>
+        <div class="res"><span class="chk">✓</span> Данные собираются автоматически по расписанию</div>
+      </div>
+
+    </div>
+    <p style="margin-top:26px;color:var(--ink-soft);font-size:15.5px;">Также: настройка и ведение рекламы, сопровождение и доработка готовых решений.</p>
+  </div>
+</section>
+
+<!-- CASES -->
+<section id="cases" class="cases">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="kicker">Примеры работ</div>
+      <h2>Кейсы: было → стало</h2>
+      <p>Три из проектов портфолио. По вашей нише пришлю подходящие примеры в личном разборе.</p>
+    </div>
+
+    <div class="case">
+      <div class="case-tag">
+        <div class="niche">Медицина</div>
+        <div class="who">Частная клиника</div>
+      </div>
+      <div class="case-body">
+        <div class="row"><span class="lab pain">Боль</span><p>Врачи тратили 15–20 минут каждого приёма на сбор жалоб и анамнеза — одни и те же вопросы. Администратор вручную распределял пациентов по специалистам и ошибался с направлением. Пациенты забывали про визит и подготовку к анализам.</p></div>
+        <div class="row"><span class="lab did">Что сделал</span><p>Бот в Telegram собирает жалобы пациента ещё до визита, задаёт уточняющие вопросы, подбирает нужного врача по симптомам и загрузке, формирует и отправляет врачу готовую карту. Плюс автоматические напоминания о приёме и подготовке.</p></div>
+        <div class="row"><span class="lab res">Результат</span><p class="res-text">Анамнез собран до визита, приём начинается сразу с сути. Маршрутизация к врачу — автоматическая. Напоминания за сутки и за 2 часа перестали приводить к неявкам.</p></div>
+      </div>
+    </div>
+
+    <div class="case">
+      <div class="case-tag">
+        <div class="niche">E-commerce · маркетплейсы</div>
+        <div class="who">Селлер на Ozon / WB</div>
+      </div>
+      <div class="case-body">
+        <div class="row"><span class="lab pain">Боль</span><p>Продавец вручную отслеживал цены конкурентов, остатки и отзывы, а рекламный бюджет уходил вслепую — было не видно, какие товары и какая реклама реально окупаются, а какие съедают маржу. Реагировать на изменения рынка не успевал, терял позиции в выдаче.</p></div>
+        <div class="row"><span class="lab did">Что сделал</span><p>Собрал систему, которая сама мониторит цены конкурентов, остатки FBO/FBS и отзывы, сводит продажи и юнит-экономику по каждому SKU в один дашборд — видно, что приносит прибыль, а что работает в минус вместе с рекламой на него.</p></div>
+        <div class="row"><span class="lab res">Результат</span><p class="res-text">Селлер видит рынок и собственную экономику в реальном времени: вовремя меняет цены, убирает убыточные позиции и не переплачивает за рекламу товаров, которые не окупаются.</p></div>
+      </div>
+    </div>
+
+    <div class="case">
+      <div class="case-tag">
+        <div class="niche">Образование</div>
+        <div class="who">Учебный центр</div>
+      </div>
+      <div class="case-body">
+        <div class="row"><span class="lab pain">Боль</span><p>Заявки с сайта падали на почту, менеджер их проглядывал и вручную переносил в таблицу. Пока обрабатывал — часть клиентов остывала и уходила.</p></div>
+        <div class="row"><span class="lab did">Что сделал</span><p>Собрал сайт с формой записи, которая за секунду отправляет заявку менеджеру в Telegram и в таблицу, а клиенту автоматически уходит подтверждение на почту.</p></div>
+        <div class="row"><span class="lab res">Результат</span><p class="res-text">Заявка попадает к менеджеру мгновенно и не теряется. Клиент сразу получает подтверждение — доверие выше, обработка быстрее.</p></div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- SAVINGS -->
+<section id="savings" class="savings">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="kicker">Оптимизация расходов</div>
+      <h2>Сколько вам стоит рутина</h2>
+      <p>Приём заявок, ответы клиентам, ввод данных, отчёты — за это вы платите зарплату каждый месяц. Автоматизация делает ту же работу за долю этой суммы.</p>
+    </div>
+    <div class="save-grid">
+      <div class="save-card">
+        <div class="cap">Люди на рутине — каждый месяц</div>
+        <div class="save-row"><span>Приём и обработка заявок, ответы клиентам</span><span class="sum">≈ 50 000 ₽</span></div>
+        <div class="save-row"><span>Ввод данных и обработка документов</span><span class="sum">≈ 45 000 ₽</span></div>
+        <div class="save-row"><span>Сбор отчётов и аналитика</span><span class="sum">≈ 30 000 ₽</span></div>
+        <div class="save-total"><span>Итого фонд оплаты</span><span class="big">≈ 125 000 ₽/мес</span></div>
+      </div>
+      <div class="save-card newc">
+        <div class="cap">Автоматизация — один раз настроить</div>
+        <div class="save-line"><b>Настройка комплекса</b> — разовая работа под ваш процесс</div>
+        <div class="save-line"><b>Сопровождение</b> — от 8 000 ₽/мес</div>
+        <div class="save-line">Ту же рутину система делает <b>24/7</b>, без выходных, отпусков и ошибок ввода</div>
+        <div class="save-total"><span>Дальше платите</span><span class="big">от 8 000 ₽/мес</span></div>
+      </div>
+    </div>
+    <div class="save-foot">
+      <div class="fitem down">
+        <div class="big">↓ Расходы</div>
+        <p>Не держите людей на работе, которую делает программа. Рутина перестаёт съедать фонд оплаты труда.</p>
+      </div>
+      <div class="fitem up">
+        <div class="big">↑ Доходы</div>
+        <p>Заявки принимаются круглосуточно и не теряются. Больше обращений доходит до сделки — а значит, до выручки.</p>
+      </div>
+    </div>
+    <p class="save-disc">Суммы ориентировочные, по средним ставкам администратора, оператора и аналитика в РФ на 2026 год. Автоматизация берёт на себя рутинные операции; там, где нужен живой специалист, она освобождает его от рутины и оставляет ему то, что действительно требует человека.</p>
+  </div>
+</section>
+
+<!-- PROCESS -->
+<section id="process">
+  <div class="wrap">
+    <div class="sec-head center">
+      <div class="kicker">Как я работаю</div>
+      <h2>От разбора до запуска</h2>
+    </div>
+    <div class="steps">
+      <div class="step">
+        <div class="n">1</div>
+        <h3>Бесплатный разбор</h3>
+        <p>Смотрю ваши процессы и говорю честно, что стоит автоматизировать, а что нет.</p>
+      </div>
+      <div class="step">
+        <div class="n">2</div>
+        <h3>Предложение и смета</h3>
+        <p>Описываю решение, сроки и стоимость. Без сюрпризов и скрытых доплат.</p>
+      </div>
+      <div class="step">
+        <div class="n">3</div>
+        <h3>Разработка</h3>
+        <p>Собираю, показываю на каждом этапе, вношу правки под ваш реальный процесс.</p>
+      </div>
+      <div class="step">
+        <div class="n">4</div>
+        <h3>Запуск и поддержка</h3>
+        <p>Внедряю, обучаю пользоваться и остаюсь на связи для доработок.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT / CTA -->
+<section id="contact" class="cta">
+  <div class="wrap">
+    <div class="cta-card">
+      <div class="cta-left" id="m">
+        <div class="free">🎁 Первая консультация бесплатно</div>
+        <h2>Расскажите о своей задаче</h2>
+        <p>Опишите, где в бизнесе уходит время или теряются клиенты. Разберу вашу ситуацию и покажу, что реально автоматизировать и что это вам даст.</p>
+        <p class="cta-tg">Или напишите напрямую в Telegram: <a href="https://t.me/vlad5595" target="_blank" rel="noopener">@vlad5595</a></p>
+      </div>
+      <div class="cta-right">
+        <form id="leadForm" action="https://script.google.com/macros/s/AKfycbwpQhcnh0angU85Q6J_GJRrxmTFEJauvXSKrEaqLAfNkT4Kwsl46GBWQULZGXE_ECRioQ/exec" method="POST" target="lead_sink" accept-charset="UTF-8">
+          <div class="field">
+            <label for="nm">Как к вам обращаться</label>
+            <input id="nm" name="name" type="text" required placeholder="Имя">
+          </div>
+          <div class="field">
+            <label for="ct">Telegram или телефон</label>
+            <input id="ct" name="contact" type="text" required placeholder="@username или +7…">
+          </div>
+          <div class="field">
+            <label for="ns">Сфера бизнеса</label>
+            <input id="ns" name="niche" type="text" placeholder="Например: автосервис, магазин, клиника">
+          </div>
+          <div class="field">
+            <label for="ts">Что хотите автоматизировать</label>
+            <textarea id="ts" name="task" placeholder="Пара слов о задаче или боли"></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary btn-lg" style="width:100%;justify-content:center;">Отправить заявку</button>
+          <div class="form-ok" id="formOk">Спасибо! Заявка отправлена — я свяжусь с вами в ближайшее время.</div>
+          <p class="form-note">Нажимая кнопку, вы соглашаетесь на обработку контактных данных для связи по заявке.</p>
+        </form>
+        <iframe name="lead_sink" style="display:none" title="lead_sink"></iframe>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <div class="foot">
+      <a href="#top" class="logo"><span class="mark">A<b>·</b></span> AI Автоматизация</a>
+      <div class="foot-links">
+        <a href="#services">Услуги</a>
+        <a href="#cases">Кейсы</a>
+        <a href="#process">Как работаю</a>
+        <a href="https://t.me/vlad5595" target="_blank" rel="noopener">Telegram</a>
+      </div>
+    </div>
+    <div class="foot-copy">© 2026 AI Автоматизация для бизнеса. Боты, сайты, интеграции и аналитика для малого и среднего бизнеса.</div>
+  </div>
+</footer>
+
+<script>
+  // Форма отправляется нативно в скрытый iframe (action+target выше) — это обходит CORS.
+  var okBox = document.getElementById('formOk');
+  var leadForm = document.getElementById('leadForm');
+  leadForm.addEventListener('submit', function(){
+    // не мешаем нативной отправке; показываем подтверждение после ухода данных
+    setTimeout(function(){
+      leadForm.querySelectorAll('input,textarea,button').forEach(function(el){ el.style.display='none'; });
+      okBox.style.display='block';
+    }, 400);
+  });
+
+  var bb = document.getElementById('burgerBtn');
+  if(bb){ bb.addEventListener('click', function(){ document.getElementById('m').scrollIntoView({behavior:'smooth'}); }); }
+</script>
+</body>
+</html>
